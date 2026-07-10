@@ -1,0 +1,6 @@
+{
+  "advancementborder.error.relocation": "The border change was cancelled because no safe relocation position was found.",
+  "advancementborder.error.owner_offline": "The configured owner is not online.",
+  "advancementborder.error.not_overworld": "This command can only be used in the Overworld.",
+  "advancementborder.error.not_configured": "AdvancementBorder has not been configured. Use /advboard set first."
+}

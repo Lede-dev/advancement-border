@@ -1,0 +1,6 @@
+{
+  "advancementborder.error.relocation": "안전한 이동 위치를 찾지 못해 보더 변경을 취소했습니다.",
+  "advancementborder.error.owner_offline": "설정된 소유자가 접속해 있지 않습니다.",
+  "advancementborder.error.not_overworld": "이 명령어는 오버월드에서만 사용할 수 있습니다.",
+  "advancementborder.error.not_configured": "AdvancementBorder가 설정되지 않았습니다. 먼저 /advboard set을 사용하세요."
+}
