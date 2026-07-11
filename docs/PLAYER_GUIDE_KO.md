@@ -82,7 +82,7 @@ Minecraft Java Edition 26.2에서 AdvancementBorder를 설치하고 사용하는
 
 ### 현재 설정 확인
 
-초기 보더 크기, 발전과제당 증가량과 엔드 중심을 표시합니다.
+초기 보더 크기, 발전과제당 증가량, 보더 확장 시간과 엔드 중심을 표시합니다.
 
 ```mcfunction
 /advboard config
@@ -126,10 +126,16 @@ Minecraft Java Edition 26.2에서 AdvancementBorder를 설치하고 사용하는
 
 ### 보더 확장 시간
 
-보더가 확장되는 시간을 초 단위로 입력합니다.
+보더가 확장되는 시간을 초 단위로 입력합니다. 기본값은 3초입니다.
 
 ```mcfunction
 /advboard config expansionDurationSeconds 3
+```
+
+예를 들어 5초 동안 확장되게 하려면 다음과 같이 입력합니다.
+
+```mcfunction
+/advboard config expansionDurationSeconds 5
 ```
 
 ### 엔드 중심
@@ -172,6 +178,8 @@ config/advancementborder.json
 ```
 
 `initialDiameter`, `growthPerAdvancement`, `expansionDurationSeconds`에는 1 이상의 정수를 입력해야 합니다.
+
+기존 설정 파일에 `expansionDurationSeconds`가 없다면 기본값인 3초가 사용됩니다.
 
 ## 6. 문제 해결
 
