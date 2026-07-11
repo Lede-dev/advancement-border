@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 
 public final class WorldBorderAdapter {
+	public static final long EXPANSION_DURATION_TICKS = 60L;
+
 	private WorldBorderAdapter() {
 	}
 
@@ -22,7 +24,17 @@ public final class WorldBorderAdapter {
 
 			WorldBorder border = level.getWorldBorder();
 			border.setCenter(projection.centerX(), projection.centerZ());
-			border.setSize(projection.diameter());
+			double currentDiameter = border.getSize();
+			if (projection.diameter() > currentDiameter) {
+				border.lerpSizeBetween(
+						currentDiameter,
+						projection.diameter(),
+						EXPANSION_DURATION_TICKS,
+						level.getGameTime()
+				);
+			} else {
+				border.setSize(projection.diameter());
+			}
 		}
 	}
 

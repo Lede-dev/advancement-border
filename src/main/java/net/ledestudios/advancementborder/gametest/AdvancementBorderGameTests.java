@@ -15,6 +15,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.border.BorderStatus;
 import net.minecraft.world.level.border.WorldBorder;
 
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -99,6 +100,39 @@ public final class AdvancementBorderGameTests {
 				helper.assertValueEqual(border.getSize(), 7.0D, projection.dimension() + " border size should match");
 				helper.assertValueEqual(border.getCenterX(), projection.centerX(), projection.dimension() + " center X should match");
 				helper.assertValueEqual(border.getCenterZ(), projection.centerZ(), projection.dimension() + " center Z should match");
+			}
+		} finally {
+			for (WorldBorderSnapshot snapshot : previous) {
+				snapshot.border().setCenter(snapshot.centerX(), snapshot.centerZ());
+				snapshot.border().setSize(snapshot.size());
+			}
+		}
+
+		helper.succeed();
+	}
+
+	@GameTest
+	public void smoothlyExpandsBordersForThreeSeconds(GameTestHelper helper) {
+		MinecraftServer server = helper.getLevel().getServer();
+		List<DimensionProjectionData> projections = DimensionProjectionSystem.project(12.5D, -8.5D, 7.0D, BorderRuleData.DEFAULT);
+		List<WorldBorderSnapshot> previous = projections.stream()
+				.map(projection -> {
+					WorldBorder border = WorldBorderAdapter.level(server, projection.dimension()).getWorldBorder();
+					return new WorldBorderSnapshot(border, border.getCenterX(), border.getCenterZ(), border.getSize());
+				})
+				.toList();
+
+		try {
+			for (WorldBorderSnapshot snapshot : previous) {
+				snapshot.border().setSize(1.0D);
+			}
+
+			WorldBorderAdapter.apply(server, projections);
+			for (DimensionProjectionData projection : projections) {
+				WorldBorder border = WorldBorderAdapter.level(server, projection.dimension()).getWorldBorder();
+				helper.assertValueEqual(border.getStatus(), BorderStatus.GROWING, projection.dimension() + " border should be growing");
+				helper.assertValueEqual(border.getLerpTarget(), 7.0D, projection.dimension() + " border target should match");
+				helper.assertValueEqual(border.getLerpTime(), WorldBorderAdapter.EXPANSION_DURATION_TICKS, projection.dimension() + " border should expand for three seconds");
 			}
 		} finally {
 			for (WorldBorderSnapshot snapshot : previous) {
