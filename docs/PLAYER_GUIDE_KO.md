@@ -14,7 +14,7 @@ Minecraft Java Edition 26.2에서 AdvancementBorder를 설치하고 사용하는
 설치 순서:
 
 1. Fabric Loader와 Fabric API를 설치합니다.
-2. `advancementborder-1.0.0+26.2.jar`를 Minecraft의 `mods` 폴더에 넣습니다.
+2. `advancementborder-1.0.1+26.2.jar`를 Minecraft의 `mods` 폴더에 넣습니다.
 3. Fabric 프로필로 게임을 실행합니다.
 4. 싱글플레이 월드에 입장합니다.
 
