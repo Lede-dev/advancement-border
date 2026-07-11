@@ -10,12 +10,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 
 public final class WorldBorderAdapter {
-	public static final long EXPANSION_DURATION_TICKS = 60L;
+	public static final long TICKS_PER_SECOND = 20L;
 
 	private WorldBorderAdapter() {
 	}
 
-	public static void apply(MinecraftServer server, List<DimensionProjectionData> projections) {
+	public static void apply(
+			MinecraftServer server,
+			List<DimensionProjectionData> projections,
+			int expansionDurationSeconds
+	) {
+		long expansionDurationTicks = expansionDurationSeconds * TICKS_PER_SECOND;
 		for (DimensionProjectionData projection : projections) {
 			ServerLevel level = level(server, projection.dimension());
 			if (level == null) {
@@ -29,7 +34,7 @@ public final class WorldBorderAdapter {
 				border.lerpSizeBetween(
 						currentDiameter,
 						projection.diameter(),
-						EXPANSION_DURATION_TICKS,
+						expansionDurationTicks,
 						level.getGameTime()
 				);
 			} else {

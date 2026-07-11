@@ -10,7 +10,15 @@ class AdvancementBorderConfigTest {
 	void validatesMinimumGrowth() {
 		assertThrows(
 				IllegalArgumentException.class,
-				() -> new AdvancementBorderConfig(1, 1, 0, new AdvancementBorderConfig.EndCenterBlock(100, 0))
+				() -> new AdvancementBorderConfig(1, 1, 0, 3, new AdvancementBorderConfig.EndCenterBlock(100, 0))
+		);
+	}
+
+	@Test
+	void validatesMinimumExpansionDuration() {
+		assertThrows(
+				IllegalArgumentException.class,
+				() -> new AdvancementBorderConfig(1, 1, 2, 0, new AdvancementBorderConfig.EndCenterBlock(100, 0))
 		);
 	}
 
@@ -20,11 +28,13 @@ class AdvancementBorderConfigTest {
 				1,
 				3,
 				1,
+				6,
 				new AdvancementBorderConfig.EndCenterBlock(42, -9)
 		);
 
 		assertEquals(3, config.toRules().initialDiameter());
 		assertEquals(1, config.toRules().growthPerAdvancement());
+		assertEquals(6, config.expansionDurationSeconds());
 		assertEquals(42, config.toRules().endCenterBlockX());
 		assertEquals(-9, config.toRules().endCenterBlockZ());
 	}

@@ -45,6 +45,12 @@ public final class AdvancementBorderCommands {
 												context.getSource(),
 												runtime(context.getSource()).updateGrowthPerAdvancement(IntegerArgumentType.getInteger(context, "blocks"))
 										))))
+						.then(Commands.literal("expansionDurationSeconds")
+								.then(Commands.argument("seconds", IntegerArgumentType.integer(1))
+										.executes(context -> respond(
+												context.getSource(),
+												runtime(context.getSource()).updateExpansionDurationSeconds(IntegerArgumentType.getInteger(context, "seconds"))
+										))))
 						.then(Commands.literal("endCenterBlock")
 								.then(Commands.argument("x", IntegerArgumentType.integer())
 										.then(Commands.argument("z", IntegerArgumentType.integer())

@@ -28,6 +28,7 @@ class AdvancementBorderConfigManagerTest {
 		assertTrue(Files.exists(path));
 		assertEquals(1, result.config().initialDiameter());
 		assertEquals(2, result.config().growthPerAdvancement());
+		assertEquals(3, result.config().expansionDurationSeconds());
 	}
 
 	@Test
@@ -41,6 +42,7 @@ class AdvancementBorderConfigManagerTest {
 		assertTrue(result.success());
 		assertEquals(1, result.config().initialDiameter());
 		assertEquals(1, result.config().growthPerAdvancement());
+		assertEquals(3, result.config().expansionDurationSeconds());
 		assertEquals(100, result.config().endCenterBlock().x());
 	}
 
@@ -55,6 +57,11 @@ class AdvancementBorderConfigManagerTest {
 		Files.writeString(rangePath, "{\"growthPerAdvancement\":0}", StandardCharsets.UTF_8);
 		AdvancementBorderConfigManager range = new AdvancementBorderConfigManager(LoggerFactory.getLogger("config-test"), rangePath);
 		assertFalse(range.load().success());
+
+		Path durationPath = temporaryDirectory.resolve("duration.json");
+		Files.writeString(durationPath, "{\"expansionDurationSeconds\":0}", StandardCharsets.UTF_8);
+		AdvancementBorderConfigManager duration = new AdvancementBorderConfigManager(LoggerFactory.getLogger("config-test"), durationPath);
+		assertFalse(duration.load().success());
 	}
 
 	@Test
@@ -65,6 +72,7 @@ class AdvancementBorderConfigManagerTest {
 				1,
 				5,
 				1,
+				8,
 				new AdvancementBorderConfig.EndCenterBlock(80, -12)
 		);
 
@@ -75,6 +83,7 @@ class AdvancementBorderConfigManagerTest {
 		assertTrue(loaded.success());
 		assertEquals(5, loaded.config().initialDiameter());
 		assertEquals(1, loaded.config().growthPerAdvancement());
+		assertEquals(8, loaded.config().expansionDurationSeconds());
 		assertEquals(80, loaded.config().endCenterBlock().x());
 		assertEquals(-12, loaded.config().endCenterBlock().z());
 		assertFalse(Files.exists(path.resolveSibling("saved.json.tmp")));

@@ -25,6 +25,7 @@ public final class AdvancementBorderConfigManager {
 			"schemaVersion",
 			"initialDiameter",
 			"growthPerAdvancement",
+			"expansionDurationSeconds",
 			"endCenterBlock"
 	);
 
@@ -67,9 +68,20 @@ public final class AdvancementBorderConfigManager {
 				int schemaVersion = integerOrDefault(object, "schemaVersion", AdvancementBorderConfig.CURRENT_SCHEMA_VERSION);
 				int initialDiameter = integerOrDefault(object, "initialDiameter", AdvancementBorderConfig.DEFAULT.initialDiameter());
 				int growth = integerOrDefault(object, "growthPerAdvancement", AdvancementBorderConfig.DEFAULT.growthPerAdvancement());
+				int expansionDurationSeconds = integerOrDefault(
+						object,
+						"expansionDurationSeconds",
+						AdvancementBorderConfig.DEFAULT.expansionDurationSeconds()
+				);
 				AdvancementBorderConfig.EndCenterBlock end = readEndCenter(object);
 
-				AdvancementBorderConfig config = new AdvancementBorderConfig(schemaVersion, initialDiameter, growth, end);
+				AdvancementBorderConfig config = new AdvancementBorderConfig(
+						schemaVersion,
+						initialDiameter,
+						growth,
+						expansionDurationSeconds,
+						end
+				);
 				return ConfigLoadResult.success(config, "설정 파일을 불러왔습니다: " + path);
 			}
 		} catch (Exception exception) {

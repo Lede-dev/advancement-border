@@ -126,7 +126,7 @@ public final class AdvancementBorderRuntime {
 			return relocation;
 		}
 
-		WorldBorderAdapter.apply(server, projections);
+		WorldBorderAdapter.apply(server, projections, config.expansionDurationSeconds());
 		savedData.recordApplied(completedCount, diameter);
 
 		return OperationResult.success("완료 발전과제 " + completedCount + "개, 보더 한 변 " + formatDiameter(diameter) + "블록으로 동기화했습니다.");
@@ -153,6 +153,7 @@ public final class AdvancementBorderRuntime {
 						config.schemaVersion(),
 						initialDiameter,
 						config.growthPerAdvancement(),
+						config.expansionDurationSeconds(),
 						config.endCenterBlock()
 				),
 				"초기 보더 크기를 " + initialDiameter + "블록으로 변경했습니다."
@@ -165,9 +166,23 @@ public final class AdvancementBorderRuntime {
 						config.schemaVersion(),
 						config.initialDiameter(),
 						growthPerAdvancement,
+						config.expansionDurationSeconds(),
 						config.endCenterBlock()
 				),
 				"발전과제당 증가량을 " + growthPerAdvancement + "블록으로 변경했습니다."
+		);
+	}
+
+	public OperationResult updateExpansionDurationSeconds(int expansionDurationSeconds) {
+		return applyUpdatedConfig(
+				new AdvancementBorderConfig(
+						config.schemaVersion(),
+						config.initialDiameter(),
+						config.growthPerAdvancement(),
+						expansionDurationSeconds,
+						config.endCenterBlock()
+				),
+				"보더 확장 시간을 " + expansionDurationSeconds + "초로 변경했습니다."
 		);
 	}
 
@@ -177,6 +192,7 @@ public final class AdvancementBorderRuntime {
 						config.schemaVersion(),
 						config.initialDiameter(),
 						config.growthPerAdvancement(),
+						config.expansionDurationSeconds(),
 						new AdvancementBorderConfig.EndCenterBlock(x, z)
 				),
 				"엔드 중심 블록을 " + x + ", " + z + "로 변경했습니다."
@@ -188,6 +204,7 @@ public final class AdvancementBorderRuntime {
 				"[AdvancementBorder 설정]",
 				"초기 보더 크기: " + config.initialDiameter() + "블록",
 				"발전과제당 증가량: " + config.growthPerAdvancement() + "블록",
+				"보더 확장 시간: " + config.expansionDurationSeconds() + "초",
 				"엔드 중심 블록: " + config.endCenterBlock().x() + ", " + config.endCenterBlock().z(),
 				"설정 파일: " + configManager.path()
 		));
@@ -203,6 +220,7 @@ public final class AdvancementBorderRuntime {
 			lines.add("설정 방법: /advboard set <x> <y> <z>");
 			lines.add("초기 보더 크기: " + rules.initialDiameter() + "블록");
 			lines.add("발전과제당 증가량: " + rules.growthPerAdvancement() + "블록");
+			lines.add("보더 확장 시간: " + config.expansionDurationSeconds() + "초");
 			return String.join("\n", lines);
 		}
 
@@ -211,6 +229,7 @@ public final class AdvancementBorderRuntime {
 		lines.add("완료 발전과제: " + state.completedCount() + "개");
 		lines.add("초기 보더 크기: " + rules.initialDiameter() + "블록");
 		lines.add("발전과제당 증가량: " + rules.growthPerAdvancement() + "블록");
+		lines.add("보더 확장 시간: " + config.expansionDurationSeconds() + "초");
 		lines.add("목표 보더 크기: " + BorderMath.calculateDiameter(rules, state.completedCount()) + "블록");
 		lines.add("적용 보더 크기: " + formatDiameter(state.appliedDiameter()) + "블록");
 		lines.add("오버월드 중심: " + state.overworldCenterX() + ", " + state.overworldCenterZ());
@@ -251,7 +270,7 @@ public final class AdvancementBorderRuntime {
 				state.overworldCenterZ(),
 				diameter,
 				rules
-		));
+		), config.expansionDurationSeconds());
 	}
 
 	private OperationResult relocateIfNeeded(

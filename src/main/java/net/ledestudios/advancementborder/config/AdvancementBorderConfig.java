@@ -6,6 +6,7 @@ public record AdvancementBorderConfig(
 		int schemaVersion,
 		int initialDiameter,
 		int growthPerAdvancement,
+		int expansionDurationSeconds,
 		EndCenterBlock endCenterBlock
 ) {
 	public static final int CURRENT_SCHEMA_VERSION = 1;
@@ -13,6 +14,7 @@ public record AdvancementBorderConfig(
 			CURRENT_SCHEMA_VERSION,
 			1,
 			2,
+			3,
 			new EndCenterBlock(100, 0)
 	);
 
@@ -25,6 +27,9 @@ public record AdvancementBorderConfig(
 		}
 		if (growthPerAdvancement < 1) {
 			throw new IllegalArgumentException("growthPerAdvancement는 1 이상이어야 합니다.");
+		}
+		if (expansionDurationSeconds < 1) {
+			throw new IllegalArgumentException("expansionDurationSeconds는 1 이상이어야 합니다.");
 		}
 		if (endCenterBlock == null) {
 			endCenterBlock = DEFAULT.endCenterBlock();

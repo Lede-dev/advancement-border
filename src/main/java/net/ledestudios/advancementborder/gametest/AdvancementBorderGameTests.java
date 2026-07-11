@@ -94,7 +94,7 @@ public final class AdvancementBorderGameTests {
 				.toList();
 
 		try {
-			WorldBorderAdapter.apply(server, projections);
+			WorldBorderAdapter.apply(server, projections, 3);
 			for (DimensionProjectionData projection : projections) {
 				WorldBorder border = WorldBorderAdapter.level(server, projection.dimension()).getWorldBorder();
 				helper.assertValueEqual(border.getSize(), 7.0D, projection.dimension() + " border size should match");
@@ -127,12 +127,12 @@ public final class AdvancementBorderGameTests {
 				snapshot.border().setSize(1.0D);
 			}
 
-			WorldBorderAdapter.apply(server, projections);
+			WorldBorderAdapter.apply(server, projections, 3);
 			for (DimensionProjectionData projection : projections) {
 				WorldBorder border = WorldBorderAdapter.level(server, projection.dimension()).getWorldBorder();
 				helper.assertValueEqual(border.getStatus(), BorderStatus.GROWING, projection.dimension() + " border should be growing");
 				helper.assertValueEqual(border.getLerpTarget(), 7.0D, projection.dimension() + " border target should match");
-				helper.assertValueEqual(border.getLerpTime(), WorldBorderAdapter.EXPANSION_DURATION_TICKS, projection.dimension() + " border should expand for three seconds");
+				helper.assertValueEqual(border.getLerpTime(), 3L * WorldBorderAdapter.TICKS_PER_SECOND, projection.dimension() + " border should expand for three seconds");
 			}
 		} finally {
 			for (WorldBorderSnapshot snapshot : previous) {
